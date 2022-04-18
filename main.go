@@ -24,6 +24,7 @@ func InitialMigration() {
 }
 
 func main() {
+
 	again := true
 	for again == true {
 		fmt.Println("\n==========================================")
@@ -60,7 +61,7 @@ func main() {
 			result := datastore.CreateUser(dbConn, user)
 			if result != nil {
 				fmt.Println("\n\n=========================================")
-				fmt.Println("!?!?!?!!?? CREATE ACCOUNT FAIL ??!!!?!?!?!")
+				fmt.Println(" !?!?!?! PASSWORD ALREADY EXIST !?!?!?!")
 				fmt.Println("=========================================")
 			} else {
 				fmt.Println("\n\n=========================================")
@@ -82,7 +83,7 @@ func main() {
 				for confirm != "0" {
 					fmt.Println("\n\n\n=========================================================")
 					fmt.Println("\t  WELCOME to ALTA RENT BOOK (ARB) ")
-					fmt.Printf("\t\t\t %s ^-^", v.Name)
+					fmt.Printf("\t\t   %s ^-^", v.Name)
 					fmt.Println("\n=========================================================")
 
 					fmt.Println("\n\nWHAT DO YOU NEED ?")
@@ -238,34 +239,34 @@ func main() {
 						resultt := datastore.GetRentedBookbyBookid(dbConn, borrow.Book_id)
 
 						if len(resultt) != 0 {
-							for _, v := range resultt {
-								fmt.Println("\n\n=================================================")
-								fmt.Println("  !?!?! SORRY, THE BOOK IS NOT AVAILABLE !?!?!?")
-								lenders := datastore.GetUserbyID(dbConn, v.User_id)
-								fmt.Printf("\n~ ^ %s ^ has been rented by %s (ID: %v) ~", borrow.Judul, lenders[0].Name, v.ID)
-								fmt.Println("\n=================================================")
 
-								fmt.Println("\n\n\nNB:")
-								fmt.Printf("[1] Would you like to lending from { %s } ?", lenders[0].Name)
-								fmt.Println("\n[2] Find other books ^-^")
+							fmt.Println("\n\n=================================================")
+							fmt.Println("  !?!?! SORRY, THE BOOK IS NOT AVAILABLE !?!?!?")
+							lenders := datastore.GetUserbyID(dbConn, resultt[0].User_id)
+							fmt.Printf("\n~ ^ %s ^ has been rented by %s (ID: %v) ~", borrow.Judul, lenders[0].Name, lenders[0].ID)
+							fmt.Println("\n=================================================")
 
-								fmt.Println("\nConfirm, please: ")
-								confirm := ""
-								fmt.Scanln(&confirm)
-								if confirm == "1" {
+							fmt.Println("\n\n\nNB:")
+							fmt.Printf("[1] Would you like to lending from { %s } ?", lenders[0].Name)
+							fmt.Println("\n[2] Find other books ^-^")
 
-									fmt.Println("\nInput My USER ID:")
-									fmt.Scanln(&borrow.User_id)
-									lending := datastore.UpdateRentedBook(dbConn, borrow.Book_id, borrow.User_id)
-									if lending == nil {
-										fmt.Println("\n================================================================")
-										fmt.Printf("\t\t\tCONGRATULATION ^-^\n\tYou have just rented %s (ID Book: %v) from { %s }\n\n>->>>->>>-> RENT BOOK SUCCESS ~~~ RENT BOOK SUCCESS <-<<<-<<<-<", borrow.Judul, borrow.Book_id, lenders[0].Name)
-										fmt.Println("\n================================================================")
-									} else {
-										fmt.Println("\n\n========================================")
-										fmt.Println(" ~~~~~ SORRY, RENT BOOK FAIL ~~~~~~")
-										fmt.Println("=======================================")
-									}
+							fmt.Println("\nConfirm, please: ")
+							confirm := ""
+							fmt.Scanln(&confirm)
+							if confirm == "1" {
+
+								fmt.Println("\nInput My USER ID:")
+								fmt.Scanln(&borrow.User_id)
+
+								lending := datastore.UpdateRentedBook(dbConn, borrow.Book_id, borrow.User_id)
+								if lending == nil {
+									fmt.Println("\n================================================================")
+									fmt.Printf("\t\t\tCONGRATULATION ^-^\n\tYou have just rented %s (ID Book: %v) from { %s }\n\n>->>>->>>-> RENT BOOK SUCCESS ~~~ RENT BOOK SUCCESS <-<<<-<<<-<", borrow.Judul, borrow.Book_id, lenders[0].Name)
+									fmt.Println("\n================================================================")
+								} else {
+									fmt.Println("\n\n========================================")
+									fmt.Println(" ~~~~~ SORRY, RENT BOOK FAIL ~~~~~~")
+									fmt.Println("=======================================")
 								}
 							}
 
@@ -296,7 +297,7 @@ func main() {
 						fmt.Println("\t\t\t\t\t><><><>< List of RENTED BOOKS ><><><><><\n\t\t\t\t\t\t  ALTA RENT BOOK (^ARB^)")
 						fmt.Println("========================================================================================================================================")
 						for _, v := range see {
-							fmt.Printf("\n[ %v ]\t[ %v ]\t%s\t\t%s\t\t%v\t\t%s\t\t%s", v.ID, v.User_id, v.Judul, v.Pengarang, v.Tahun_terbit, v.CreatedAt, v.UpdatedAt)
+							fmt.Printf("\n[ %v ]\t[ %v ]\t%s\t\t%s\t\t%v\t\t%s\t\t%s", v.Book_id, v.User_id, v.Judul, v.Pengarang, v.Tahun_terbit, v.CreatedAt, v.UpdatedAt)
 						}
 						if len(result) < 1 {
 							fmt.Println("=================================================")
@@ -450,18 +451,6 @@ func main() {
 				fmt.Println("=================================================")
 			}
 			fmt.Println("\n=========================================================================================")
-			// result := datastore.GetRentedBook(dbConn)
-			// fmt.Println("=================================================")
-			// fmt.Printf("\n\t\t<><> LIST RENTED BOOK <><>")
-			// fmt.Println("\n================================================")
-			// for _, v := range result {
-			// 	fmt.Printf("\n\t%s\t\t%s\t\t%v\t\t%s", v.Judul, v.Pengarang, v.Tahun_terbit, v.CreatedAt)
-			// }
-			// if len(result) < 1 {
-			// 	fmt.Println("=================================================")
-			// 	fmt.Println("\t~~~ SORRY, NOT ANY BOOK ~~~")
-			// 	fmt.Println("\n================================================")
-			// }
 
 		}
 		fmt.Println("\n\nNOTE:")
@@ -471,13 +460,13 @@ func main() {
 		fmt.Scanln(&pilihan)
 		if pilihan == "2" {
 			again = false
-			fmt.Println("\n=================================================================================")
-			fmt.Println("\t>->>>->>>-> THANK YOU ~~~~~ THANK YOU  ~~~~~ THANK YOU <-<<<-<<<-<")
-			fmt.Println("\t\t\t  Alta Immersive Progam BE 8")
-			fmt.Println("=================================================================================")
 
 		}
 
 	}
+	fmt.Println("\n=================================================================================")
+	fmt.Println("\t>->>>->>>-> THANK YOU ~~~~~ THANK YOU  ~~~~~ THANK YOU <-<<<-<<<-<")
+	fmt.Println("\t\t\t  Alta Immersive Progam BE 8")
+	fmt.Println("=================================================================================")
 
 }
