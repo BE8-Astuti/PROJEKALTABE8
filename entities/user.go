@@ -8,9 +8,8 @@ type User struct {
 	gorm.Model
 	Name         string
 	Email        string
-	Password     string
+	Password     string `gorm:"unique" json:"phone" form:"phone"`
 	Address      string
 	Phone        string
-	Books        []Book        `gorm:"foreignKey:user_id"`
 	Rented_BookS []Rented_Book `gorm:"foreignKey:user_id"`
 }

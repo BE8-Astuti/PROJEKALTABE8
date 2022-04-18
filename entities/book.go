@@ -6,9 +6,8 @@ import (
 
 type Book struct {
 	gorm.Model
-	User_id      uint
 	Judul        string
 	Pengarang    string
-	Tahun_terbit uint
+	Tahun_terbit string
 	Rented_Books []Rented_Book `gorm:"foreignKey:book_id"`
 }

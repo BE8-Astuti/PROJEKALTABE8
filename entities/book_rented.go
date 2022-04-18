@@ -10,5 +10,5 @@ type Rented_Book struct {
 	Book_id      uint
 	Judul        string
 	Pengarang    string
-	Tahun_terbit uint
+	Tahun_terbit string
 }
